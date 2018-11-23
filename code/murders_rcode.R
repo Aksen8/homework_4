@@ -10,7 +10,7 @@ head(murders1995)
 
 #Descritive statistics 
 summary(murders1995)  
-range(murders1995)  
+range(murders1995$murders)  
 hist(murders1995$murders)
 
 #Correlation coefficients
@@ -36,3 +36,20 @@ ggsave(here("homework_4/figures", "stand_res_model1.png"))
 ggplot(murders1995, aes(x = model1$fitted.values, y = model1$residuals)) +
     geom_point() 
 ggsave(here("homework_4/figures", "res_fitval_model1.png"))
+
+#Linear Regression. Model 2
+model2 <- lm(formula = murdrate ~ perc1019 + perc2029 + percblack + percmale + rpcpersinc, 
+             data = murders1995)
+summary(model2)
+
+#Standardized residuals histogram. Model 2
+stand_res_model2 <- rstandard(model2)
+murders1995 %>% ggplot(aes(x = stand_res_model2)) +
+    geom_histogram(bins = 20) + xlab("Standardized residuals")
+ggsave(here("homework_4/figures", "stand_res_model2.png"))
+
+#Residual vs the fitted value graph. Model 2
+ggplot(murders1995, aes(x = model2$fitted.values, y = model2$residuals)) +
+    geom_point() 
+ggsave(here("homework_4/figures", "res_fitval_model2.png"))
+
